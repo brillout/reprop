@@ -75,7 +75,7 @@
 
 
 -->
-[Introduction](/)<br/>
+[Introduction](/../../)<br/>
 [About Performance](/docs/performance.md)<br/>
 [Usage with `reprop/pure`](/packages/reprop/pure)<br/>
 [Usage with `react-reprop`](/packages/react-reprop)<br/>

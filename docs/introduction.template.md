@@ -3,7 +3,7 @@
 
 !MENU_TITLE Introduction
 !MENU_ORDER 0
-!MENU_LINK /
+!MENU_LINK /../../
 !MENU
 
 ## Introduction

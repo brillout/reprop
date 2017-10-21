@@ -78,7 +78,7 @@
 [<p align="center"><img src='https://github.com/brillout-test/reprop-test/blob/master/docs/logo/logo-title.svg' width=400 style="max-width:100%;" alt="Reprop"/></p>](https://github.com/brillout/reprop)
 <br/>
 
-[Introduction](/)<br/>
+[Introduction](/../../)<br/>
 [About Performance](/docs/performance.md)<br/>
 [Usage with `reprop/pure`](/packages/reprop/pure)<br/>
 [Usage with `react-reprop`](/packages/react-reprop)<br/>
