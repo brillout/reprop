@@ -1,0 +1,11 @@
+<svg width="820" height="230" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+ <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+ <g>
+  <title>Layer 1</title>
+  <circle fill="#000000" stroke-width="20" cx="111" cy="120" r="90" fill-opacity="0.01" stroke="#41b883" id="svg_17"/>
+  <rect fill="#ffffff" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="141" y="30" width="65" height="65" id="svg_6" stroke="#000000"/>
+  <circle fill="#41b883" stroke-width="0" cx="198" cy="95" r="25" id="svg_10" stroke="#000000"/>
+  <circle fill="#41b883" stroke-width="0" cx="136" cy="34" r="25" stroke="#000000" id="svg_18"/>
+  <text fill="#24292e" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="285" y="251" id="svg_14" font-size="24" font-family="Sans-serif" text-anchor="middle" xml:space="preserve" transform="matrix(6.9634019855780505,0,0,6.9634019855780505,-1442.7191918651636,-1575.634445188056) " stroke="#ff0000" opacity="0.85">Reprop</text>
+ </g>
+</svg>

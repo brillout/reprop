@@ -1,0 +1,24 @@
+{
+  "name": "reprop",
+  "version": "0.1.0",
+  "description": "Manage view logic with component encapsulation",
+  "repository": "github:brillout/reprop",
+  "scripts": {
+    "prepare": "./node_modules/.bin/self-import"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "babel-cli": "*",
+    "babel-plugin-transform-object-rest-spread": "*",
+    "babel-polyfill": "*",
+    "babel-preset-env": "*",
+    "babel-preset-react": "*",
+    "babel-register": "*",
+    "parent-module": "0.1.0",
+    "pretty": "*",
+    "react": "*",
+    "react-dom": "*",
+    "reassert": "*",
+    "self-import": "1.0.1"
+  }
+}

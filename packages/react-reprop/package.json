@@ -1,0 +1,24 @@
+{
+  "name": "react-reprop",
+  "version": "0.1.0",
+  "description": "Manage view logic with component encapsulation. React integration.",
+  "main": "index.js",
+  "dependencies": {
+    "reprop": "*"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-object-rest-spread": "*",
+    "babel-polyfill": "*",
+    "babel-preset-env": "*",
+    "babel-preset-react": "*",
+    "babel-register": "*",
+    "pretty": "*",
+    "react": "*",
+    "react-dom": "*",
+    "react-test-renderer": "*",
+    "require-self": "*"
+  },
+  "peerDependencies": {
+    "react": "*"
+  }
+}
