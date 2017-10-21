@@ -81,8 +81,9 @@ const TodoListProps = {
         // Tell Reprop that something changed.
         resolve();
     },
-    // Reprop calls `onEnd` when the element is not used anymore. It is typically used to do cleanup and
-    // `endParams` can be mutated in `onBegin` in order to pass necessary cleanup information to `onEnd`.
+    // Reprop calls `onEnd` when the element is not used anymore. It is typically used to do
+    // cleanup and `endParams` can be mutated in `onBegin` in order to pass necessary cleanup
+    // information to `onEnd`.
     // onEnd: ({endParams, context, props, state}) => {},
 };
 
