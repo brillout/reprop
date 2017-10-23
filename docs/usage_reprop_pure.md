@@ -75,12 +75,6 @@
 
 
 -->
-[Introduction](/../../)<br/>
-[About Performance](/docs/performance.md)<br/>
-[Usage with `reprop/pure`](/packages/reprop/pure)<br/>
-[Usage with `react-reprop`](/packages/react-reprop)<br/>
-[Usage with `reprop`](/packages/reprop)
-
 ## `reprop/pure`
 
 `reprop` is based on `reprop/pure`.
@@ -130,11 +124,11 @@ The following example acts as API description as it displays (almost) the whole 
 
 To run the example;
 ~~~js
-cd /tmp && git clone git@github.com:brillout/reprop && cd reprop && npm i && ./node_modules/.bin/lerna bootstrap && node ./examples/todo/reprop-pure
+cd /tmp && git clone git@github.com:brillout/reprop && cd reprop && npm i && ./node_modules/.bin/lerna bootstrap && node ./examples/advanced/todo/reprop-pure
 ~~~
 
 ~~~js
-// /examples/todo/reprop-pure/app.js
+// /examples/advanced/todo/reprop-pure/app.js
 
 const React = require('react');
 const Reprop = require('reprop/pure');
@@ -162,7 +156,7 @@ function onResolvedProps(props) {
 ~~~
 
 ~~~js
-// /examples/todo/reprop-pure/components/TodoList.js
+// /examples/advanced/todo/reprop-pure/components/TodoList.js
 
 const React = require('react');
 const Reprop = require('reprop/pure');
@@ -244,7 +238,7 @@ function TodoListProps() {
 ~~~
 
 ~~~js
-// /examples/todo/reprop-pure/components/TodoItem.js
+// /examples/advanced/todo/reprop-pure/components/TodoItem.js
 
 const React = require('react');
 const Reprop = require('reprop/pure');

@@ -1,7 +1,7 @@
 {
   "name": "reprop",
   "version": "0.1.0",
-  "description": "Manage view logic with component encapsulation",
+  "description": "View Logic Management. Re-thought, from the ground up.",
   "repository": "github:brillout/reprop",
   "scripts": {
     "prepare": "./node_modules/.bin/self-import"

@@ -75,12 +75,6 @@
 
 
 -->
-[Introduction](/../../)<br/>
-[About Performance](/docs/performance.md)<br/>
-[Usage with `reprop/pure`](/packages/reprop/pure)<br/>
-[Usage with `react-reprop`](/packages/react-reprop)<br/>
-[Usage with `reprop`](/packages/reprop)
-
 ## `react-reprop`
 
 Reprop's React integration `react-reprop` is work in progress.
@@ -92,7 +86,7 @@ You can use `reprop`, Reprop's standalone version, in the meantime.
 The API will be something like the following;
 
 ~~~js
-// /examples/todo/react-reprop/components/TodoList.js
+// /examples/advanced/todo/react-reprop/components/TodoList.js
 
 const React = require('react');
 const ReactReprop = require('react-reprop');
@@ -144,7 +138,7 @@ const TodoList = ReactReprop(
 ~~~
 
 ~~~js
-// /examples/todo/react-reprop/components/TodoItem.js
+// /examples/advanced/todo/react-reprop/components/TodoItem.js
 
 const React = require('react');
 const ReactReprop = require('react-reprop');
@@ -178,7 +172,7 @@ const TodoItem = ReactReprop(
 ~~~
 
 ~~~js
-// /examples/todo/react-reprop/app.js
+// /examples/advanced/todo/react-reprop/app.js
 
 const React = require('react');
 const ReactReprop = require('react-reprop');

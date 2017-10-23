@@ -1,9 +1,3 @@
-process.on('unhandledRejection', err => {throw err});
-require('babel-polyfill');
-require("babel-register")({
-    babelrc: false,
-    presets: ['react'],
-    plugins: ['transform-object-rest-spread'],
-});
+require('reprop/utils/babel_run');
 require('./app');
 

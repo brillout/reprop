@@ -1,60 +1,31 @@
-const Reprop = require('reprop');
+import Reprop from 'reprop' // npm install reprop
+import React from 'react';
+import ReactDOMServer from 'react-dom/server';
+
+const HelloPresentation = ({name, elapsedSeconds}) => (
+    <div>{'Hello '+name+' (after '+elapsedSeconds+'s)'}</div>
+);
 
 const HelloProps = {
     name: 'Hello',
-    onResolve: ({
-        previousResolvedProps: {timerCount: previousTimerCount},
-        state: {timerStart},
-        props: {name},
-        previousProps: {name: previousName}
-    }) => {
-        const timerCount = Math.floor((new Date() - timerStart)/1000);
-
-        if( timerCount===previousTimerCount && name===previousName ) {
-            return null;
-        }
-
-        const message = 'Hello '+name+', you are here since '+timerCount+' seconds';
-
+    onResolve: ({state: {name, startDate}}) => {
         return {
-            timerCount,
-            message,
-        };
-    },
-    onBegin: ({props, resolve, state}) => {
-        state.timerStart = new Date();
-        resolve();
-        setInterval(() => {
-            resolve();
-        }, 100);
-    },
-};
-
-// It is a convention to have one component = one file but we make an exception to keep things minimal.
-const AppProps = {
-    name: 'App',
-    onResolve: ({state: {name}}) => {
-        return {
-            helloProps: Reprop.createPropsElement(HelloProps, {name})
+            name,
+            elapsedSeconds: Math.floor((new Date() - startDate)/1000),
         };
     },
     onBegin: ({resolve, state}) => {
-        const setRandomName = () => {
-            state.name = Math.random()<0.5 ? 'Jon': 'Cersei';
-            resolve();
-        };
-
-        setRandomName();
-
-        setInterval(() => {
-            setRandomName();
-        }, 1000);
+        state.startDate = new Date();
+        state.name = 'Jon';
+        resolve();
+        setTimeout(() => {state.name = 'Cersei'; resolve()}, 1000);
+        setTimeout(() => {state.name = 'Tyrion'; resolve()}, 2000);
     },
 };
 
 Reprop.resolve({
-    propsElement: Reprop.createPropsElement(AppProps),
+    propsElement: Reprop.createPropsElement(HelloProps, {}),
     onResolvedProps: props => {
-        console.log(JSON.stringify(props, null, 2));
+        console.log(ReactDOMServer.renderToStaticMarkup(<HelloPresentation {...props}/>));
     },
 });

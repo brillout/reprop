@@ -75,12 +75,6 @@
 
 
 -->
-[Introduction](/../../)<br/>
-[About Performance](/docs/performance.md)<br/>
-[Usage with `reprop/pure`](/packages/reprop/pure)<br/>
-[Usage with `react-reprop`](/packages/react-reprop)<br/>
-[Usage with `reprop`](/packages/reprop)
-
 ## `reprop`
 
 Read the Introduction for how to use `reprop`.

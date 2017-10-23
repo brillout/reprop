@@ -1,6 +1,2 @@
-require('reprop/utils/seq_run')([
-    './reprop-pure',
-    './reprop',
- // './editable/reprop',
- // './react-reprop',
-]);
+require('reprop/utils/babel_run');
+require('./app');

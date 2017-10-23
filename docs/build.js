@@ -35,6 +35,7 @@ const path_module = require('path');
         const menu_text = (
             templates
             .slice()
+            .filter(t => t.menu_order)
             .sort((t1, t2) => parseInt(t1.menu_order) - parseInt(t2.menu_order))
             .map(template => {
                 const link = template.menu_link || template.dist_path__md_relative;
@@ -155,8 +156,11 @@ const path_module = require('path');
                     {path_end: node_module, replace_with: node_module}
                 )
             );
-            const regex = new RegExp("require\\('.*\\/"+path_end+"'\\)", 'g');
-            template.content = template.content.replace(regex, "require('"+replace_with+"')");
+            const regex_require = new RegExp("require\\('.*\\/"+path_end+"'\\)", 'g');
+            template.content = template.content.replace(regex_require, "require('"+replace_with+"')");
+
+            const regex_import = new RegExp(" from '.*\\/"+path_end+"'", 'g');
+            template.content = template.content.replace(regex_import, " from '"+replace_with+"'");
         });
 
         return template.content;

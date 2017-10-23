@@ -31,16 +31,19 @@ function create_element_fn(element_obj) {
     const {name} = element_obj;
     assert_internal(name.constructor===String);
 
+    assert_usage(
+        !element_names[name],
+        /* TODO stringify functions
+        element_fn_map.get(element_obj),
+        element_obj,
+        "The name `"+name+"` should be used for one *Props object only. The name is used at the two above printed *Props object instead.",
+        */
+        "The name `"+name+"` should be used for one *Props object only.",
+    );
     assert_internal(
         !element_names[name] || element_fn_map.has(element_obj),
         element_names,
         name,
-    );
-    assert_usage(
-        !element_names[name],
-        element_fn_map.get(element_obj),
-        element_obj,
-        "The name `"+name+"` should be used for one *Props object only. The name is used at the two above printed *Props object instead.",
     );
     element_names[name] = true;
 
@@ -139,6 +142,11 @@ function create_element_fn(element_obj) {
 }
 
 function assert_element_obj(element_obj) {
+    assert_usage(
+        element_obj instanceof Object,
+        element_obj,
+        "*Props object is expected to be an object be we got the value printed above instead",
+    );
     assert_usage(
         element_obj.onResolve instanceof Function,
         "`onResolve` is required and has to be a function.",

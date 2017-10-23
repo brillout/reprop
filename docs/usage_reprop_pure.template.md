@@ -1,8 +1,3 @@
-!MENU_TITLE Usage with `reprop/pure`
-!MENU_ORDER 20
-!MENU_LINK /packages/reprop/pure
-!MENU
-
 ## `reprop/pure`
 
 `reprop` is based on `reprop/pure`.
@@ -52,17 +47,17 @@ The following example acts as API description as it displays (almost) the whole 
 
 To run the example;
 ~~~js
-cd /tmp && git clone git@github.com:brillout/reprop && cd reprop && npm i && ./node_modules/.bin/lerna bootstrap && node ./examples/todo/reprop-pure
+cd /tmp && git clone git@github.com:brillout/reprop && cd reprop && npm i && ./node_modules/.bin/lerna bootstrap && node ./examples/advanced/todo/reprop-pure
 ~~~
 
 ~~~js
-!INLINE ../examples/todo/reprop-pure/app.js
+!INLINE ../examples/advanced/todo/reprop-pure/app.js
 ~~~
 
 ~~~js
-!INLINE ../examples/todo/reprop-pure/components/TodoList.js
+!INLINE ../examples/advanced/todo/reprop-pure/components/TodoList.js
 ~~~
 
 ~~~js
-!INLINE ../examples/todo/reprop-pure/components/TodoItem.js
+!INLINE ../examples/advanced/todo/reprop-pure/components/TodoItem.js
 ~~~
