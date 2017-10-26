@@ -10,12 +10,9 @@
 
 ## Introduction
 
-Reprop is a small JavaScript library to manage view logics. Reprop's focus is on
+Reprop is a small JavaScript library to help you manage the logics of your views.
 
- - Separation of Concerns
- - Source-of-Truth Rendering (every time the UI updates, the entire UI is re-computed from all source-of-truths.)
-
-and is about giving benefits in
+Reprop is about giving benefits in
 
  - Flexibility (being able to easily change the code to implement new requirements)
  - Ease of Reasoning (being able to understand how the code works)
@@ -23,21 +20,52 @@ and is about giving benefits in
  - Debuging
  - Server-Side Rendering
 
-It does not manage your data stores (you can use Redux or MobX for that).
-Reprop is only about view logic.
 
-It works with any view library but the docs assume a Reprop & React usage.
+#### Hello World
+
+~~~js
+!INLINE ../examples/hello-world/app.js
+~~~
+
+Executing prints
+
+~~~
+<div style='color: green'>Hello World</div>
+~~~
+
+A view written with Reprop consists of two parts;
+
+ - The **view presentation**,
+with the responsibility to turn "props" into a "view element".
+With "view element" we mean a description of how the view should look like,
+in our case an HTML string.
+And with "props",
+short for properties, we mean the parameters for creating the view element,
+in this example the object `{message: 'Hello World}`.
+
+ - The **view logic**,
+with the responsibility to compute the props for the view presentation.
+
+And an app contains one
+
+ - **Rendering**,
+    with the responsibility to stitch things together;
+   <span>1.</span> To listen for new props returned by the view logic,
+   <span>2.</span> pass the received props to the view presentation, and
+   <span>3.</span> render the view element returned by the view presentation, in our case `console.log(viewElement)`
 
 
+Now this example is not particularly exciting as the view logic always returns the same `{message: "Hello World"}`.
 
+Let's move to something more dynamic.
 
-#### Hello world
+#### A Dynamic Example
 
 ~~~js
 !INLINE ../examples/hello/app.js
 ~~~
 
-resulting in
+Executing prints
 
 ~~~
 <div>Hello Jon (after 0s)</div>
@@ -45,46 +73,20 @@ resulting in
 <div>Hello Tyrion (after 2s)</div>
 ~~~
 
-`onResolve`'s job is to compute `HelloPresentation`'s props from the two source-of-truths `state.name` and `state.startDate`.
-The `onResolve` function plays a central role in source-of-truth rendering and we will talk more about that later.
+As we can see in this example, we call `resolve` every time we want to update `props`.
+Calling `resolve` more than once makes the view and the whole UI dynamic.
 
-When using Reprop with React, view presentations are pure functional React components, in our case `HelloPresentation`.
-(But you can use Reprop with class/stateful components as well if needed.)
-And the view logic is handled by a *Reprop object*, in this example `HelloProps`.
+Note that the view logic `HelloProps` is entirely independent of the view presentation `HelloPresentation`.
+This is a general paradigm with Reprop.
 
-Note that we could change `onResolvedProps` to
+> With Reprop, the view logic is independent of the view presentation.
 
-~~~js
-Reprop.resolve({
-    propsElement: Reprop.createPropsElement(HelloProps, {}),
-    onResolvedProps: props => {
-        console.log(props);
-    },
-});
-~~~
+This clean cut allows us to test the entire UI independently of the view presentations
+(thus independently of your view renderer (e.g. React) and without a browser).
+You can write tests that focuses on view logics,
+instead on the less error-prone view presentations of your UI.
 
-to get
-
-~~~js
-{ name: 'Jon', elapsedSeconds: 0 }
-{ name: 'Cersei', elapsedSeconds: 1 }
-{ name: 'Tyrion', elapsedSeconds: 2 }
-~~~
-
-This shows that the view logic is entirely independent of `HelloPresentation` and of React.
-
-In general
-
-> With Reprop, the logic of a view is independent of the view's presentation.
-
-This clean cut increases flexibility and allows us test the entire UI independently of the view presentations (thus independently of React and without a browser).
-
-As this example shows, Reprop's sole goal is to
-(dynamically) compute the props required by view presentations.
-
-The management of data stores is up to you and you can use any library to do so (Redux, MobX, etc.).
-
-This example is too simple to show the "full benefit" of using Reprop,
+This example is still too simple to show the "full benefit" of using Reprop,
 let's move to a more interesting example.
 
 
