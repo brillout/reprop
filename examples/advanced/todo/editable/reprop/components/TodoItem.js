@@ -14,10 +14,9 @@ const TodoItemPresentation = ({text, draftText, onTextChange, onEdit, onSave}) =
 
 const TodoItemProps = {
     name: 'TodoItem',
-    // Note that you can't mutate `state` in `onResolve` and you can never mutate `props`.
-    onResolve: ({state: {draftText}, props: {id}, context: {itemStore}}) => {
-        // We assemble the presentation props from source-of-truths `state.draftText`
-        // and `context.itemStore`.
+    // Note that you can't mutate `state` in `onResolve` and you can never mutate `attrs`
+    onResolve: ({state: {draftText}, attrs: {id}, context: {itemStore}}) => {
+        // We assemble the props from source-of-truths `state.draftText` and `context.itemStore`
         const {text} = itemStore.getItem(id);
         return {
             text,
@@ -29,10 +28,9 @@ const TodoItemProps = {
         state.draftText = null;
         resolve();
     },
-    // As we don't have access to `resolve` in `onResolve` we add the event listeners to `staticProps`.
-    // Reprop will run `staticProps` once and add the returned props to the presentation props on every
-    // resolve.
-    staticProps: ({resolve, state, context: {itemStore}, props: {id}}) => {
+    // As we don't have access to `resolve` in `onResolve` we add the event listeners to `staticProps`,
+    // `staticProps` is run once and the returned props are added to the props returned by `onResolve`
+    staticProps: ({resolve, state, context: {itemStore}, attrs: {id}}) => {
         return {
             onTextChange,
             onEdit,

@@ -1,4 +1,4 @@
-import Reprop from 'reprop' // npm install reprop
+import Reprop from 'reprop'; // npm install reprop
 
 // === View Presentation ===
 const HelloPresentation = props => (
@@ -19,8 +19,9 @@ const HelloProps = {
     onBegin({resolve, state}) { // `onBegin` is called once when the view is created
         state.startDate = new Date();
         state.name = 'Jon';
+        // Initial resolve. Calling `resolve` makes Reprop retrieve props by calling `onResolve`.
         resolve();
-        // We call `resolve` every time we want to update `props`
+        // We call `resolve` every time we want to update the UI.
         setTimeout(() => {state.name = 'Cersei'; resolve()}, 1000);
         setTimeout(() => {state.name = 'Tyrion'; resolve()}, 2000);
     },
@@ -30,6 +31,8 @@ const HelloProps = {
 Reprop.resolve({
     propsElement: Reprop.createPropsElement(HelloProps),
     onResolvedProps(props) {
-        console.log(HelloPresentation(props));
+        // For every new computed props, `onResolvedProps` is called with the newly computed props.
+        const viewElement = HelloPresentation(props);
+        console.log(viewElement);
     },
 });

@@ -73,7 +73,7 @@ function loadCharacters() {
 }
 
 function CharacterProps() {
-    let props;
+    let attrs;
 
     return {
         onBegin: onProp,
@@ -81,13 +81,13 @@ function CharacterProps() {
         onResolve: () => {
             return {
                 extraProp: true,
-                ...props,
+                ...attrs,
             };
         },
     };
 
-    function onProp({props: props_, resolve}) {
-        props = props_;
+    function onProp({attrs: attrs_, resolve}) {
+        attrs = attrs_;
         resolve();
     }
 }

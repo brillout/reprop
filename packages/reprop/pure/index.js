@@ -10,6 +10,12 @@ const NAMES = {
     resolve_root_listener: 'onResolvedProps',
     initial_props: 'propsElement',
     context_obj: 'context',
+    reprop_thing: '*Props',
+    reprop_object: '*Props object',
+    reprop_function: '*Props function',
+    reprop_function_suffix: 'Props',
+    presentation_params: 'props',
+    logic_params: 'attrs',
     life_methods_on_resolve: 'onResolve',
     life_methods_on_begin: 'onBegin',
     life_methods_on_update: 'onUpdate',
@@ -17,7 +23,9 @@ const NAMES = {
     life_methods_static_props: 'staticProps',
     life_methods_args_resolve: 'resolve',
     life_methods_args_resolve_branch: 'resolveSelfAndDescendantsOnly',
-    life_methods_args_props: 'props',
+    life_methods_args_attrs: 'attrs',
+    // TODO remove __tmp__props
+    __tmp__props: 'props',
     life_methods_args_previous_resolved_props: 'previousResolvedProps',
     project: 'reprop',
 };
@@ -67,13 +75,13 @@ function traverse_and_resolve({props__initial, resolve_listener, process_listene
 
     assert_usage(
         props__initial!==undefined,
-        "Resolving props as `undefined` which is forbidden.",
+        "Resolving "+NAMES.presentation_params+" as `undefined` which is forbidden.",
         "Resolve `null` instead if you want to erase the previous resolved value.",
     );
     assert_warning(
         !(props__initial instanceof Function),
         "Resolving a function named `"+(props__initial||{}).name+"` which is a no-op.",
-        "*Props functions should be passed to `"+NAMES.create_element+"`.",
+        NAMES.reprop_function+"s should be passed to `"+NAMES.create_element+"`.",
         "`"+NAMES.create_element+"` returns an element that can be resolved.",
     );
 
@@ -222,7 +230,7 @@ function CycleCatcher() {
             assert_usage(
                 false,
                 obj,
-                "You can't use a cyclic object as props. Yet props printed above is cyclic."
+                "You can't use a cyclic object as "+NAMES.presentation_params+". Yet the "+NAMES.presentation_params+" object printed above is cyclic."
 
             );
             return true;
@@ -302,8 +310,8 @@ function InstanceCollection(daddy_instance) {
             ! (element_key in key_map),
             (key_map[element_key]||{}).element_current,
             instance_.element_current,
-            "The two elements have the same *Props function `"+instance_.element_fn.name+"` and the same key `"+element_key+"`.",
-            "Child elements with the same *Props function and the same parent should have different keys.",
+            "The two elements have the same "+NAMES.reprop_thing+" `"+instance_.element_fn.name+"` and the same key `"+element_key+"`.",
+            "Child elements with the same "+NAMES.reprop_thing+" and the same parent should have different keys.",
         );
 
         key_map[element_key] = instance_;
@@ -375,7 +383,8 @@ function create_element_instance(element, daddy_instance) {
             const on_begin = life_methods[NAMES.life_methods_on_begin];
             if( on_begin ) {
                 on_begin({
-                    [NAMES.life_methods_args_props]: element_props,
+                    [NAMES.life_methods_args_attrs]: element_props,
+                 // [NAMES.__tmp__props]: element_props,
                     [NAMES.life_methods_args_resolve]: resolver__begin,
                     [NAMES.life_methods_args_resolve_branch]: resolve_branch,
                     [NAMES.context_obj]: get_context(),
@@ -388,7 +397,8 @@ function create_element_instance(element, daddy_instance) {
             const on_update = life_methods[NAMES.life_methods_on_update];
             if( on_update ) {
                 on_update({
-                    [NAMES.life_methods_args_props]: element_props,
+                    [NAMES.life_methods_args_attrs]: element_props,
+                 // [NAMES.__tmp__props]: element_props,
                     [NAMES.life_methods_args_resolve]: resolver__update,
                     [NAMES.life_methods_args_resolve_branch]: resolve_branch,
                     [NAMES.context_obj]: get_context(),
@@ -416,7 +426,8 @@ function create_element_instance(element, daddy_instance) {
                 null
             ) : (
                 ctx_getter({
-                    [NAMES.life_methods_args_props]: element_props,
+                    [NAMES.life_methods_args_attrs]: element_props,
+                 // [NAMES.__tmp__props]: element_props,
                     [NAMES.context_obj]: get_context(),
                 })
             )
@@ -516,7 +527,8 @@ function create_element_instance(element, daddy_instance) {
         static_props = life_methods[NAMES.life_methods_static_props]({
             [NAMES.life_methods_args_resolve]: resolver__static_props,
             [NAMES.life_methods_args_resolve_branch]: resolve_branch,
-            [NAMES.life_methods_args_props]: element_props,
+            [NAMES.life_methods_args_attrs]: element_props,
+         // [NAMES.__tmp__props]: element_props,
             [NAMES.context_obj]: get_context(),
         });
         assert_static_props(static_props);
@@ -586,17 +598,17 @@ function create_element_instance(element, daddy_instance) {
     }
     function assert_resolved_props(props_) {
         const prefix = "The `"+NAMES.life_methods_on_resolve+"` of `"+get_props_name()+"` is returning ";
-        const addendum = "The props returned by `"+NAMES.life_methods_on_resolve+"` should be `null` or an object.";
+        const addendum = "The "+NAMES.presentation_params+" returned by `"+NAMES.life_methods_on_resolve+"` should be `null` or an object.";
         assert_usage(
             props_!==undefined,
             prefix+"`undefined`.",
-            "It should return the resolved props instead.",
+            "It should return the resolved "+NAMES.presentation_params+" instead.",
             addendum,
         );
         assert_usage(
             !((props_||{}).then instanceof Function),
             prefix+"a promise (a then-able to be more precise).",
-            "It should synchronously return the resolved props instead.",
+            "It should synchronously return the resolved "+NAMES.presentation_params+" instead.",
             "The asyncronous logic should reside at the place where `"+NAMES.life_methods_args_resolve+"` is called.",
             addendum,
         );
@@ -622,9 +634,9 @@ function create_element_instance(element, daddy_instance) {
         );
         /* TODO
         assert_usage(
-            !lm.name.endsWith('Props'),
+            !lm.name.endsWith(NAMES.reprop_function_suffix),
             lm,
-            wrong_usage_intro()+"not return a *Props function but it does return the *Props function printed above."
+            wrong_usage_intro()+"not return a "+NAMES.reprop_function+" but it does return the "+NAMES.reprop_function+" printed above."
         );
         */
     }
@@ -634,7 +646,7 @@ function create_element_instance(element, daddy_instance) {
         assert_usage(
             ret===undefined,
             ret,
-            'Resolved props are to be returned using `'+NAMES.life_methods_args_resolve+'`.',
+            'Resolved '+NAMES.presentation_params+' are to be returned using `'+NAMES.life_methods_args_resolve+'`.',
             'Instead `'+element_fn+'` returns the value printed above.',
             'Use `reolveProps` instead of `return`.',
         );
@@ -642,7 +654,7 @@ function create_element_instance(element, daddy_instance) {
     */
 
     function wrong_usage_intro() {
-        return "The *Props function `"+get_props_name()+"` should ";
+        return "The "+NAMES.reprop_function+" `"+get_props_name()+"` should ";
 
     }
 }
@@ -764,7 +776,6 @@ function create_props_element(element_fn, element_props, {disable_name_warning}=
 
 function get_element_info(obj) {
     assert_internal(isPropsElement(obj));
-    assert_internal(!('props' in obj));
 
     const {element_props={}, element_fn, element_id} = obj;
 
@@ -782,10 +793,10 @@ function create_process_logger() {
 
     function on_init({count, props__root}) {
         logger({
-            title: 'Props Resolve Initial',
+            title: NAMES.presentation_params+' Resolve Initial',
             text: [
                 stringify_props(props__root),
-                'Above are the props before starting resolving.',
+                'Above are the '+NAMES.logic_params+' before starting resolving.',
             ],
         })
     }
@@ -794,31 +805,31 @@ function create_process_logger() {
         logger({
             title: 'Root resolved',
             text: [
-                'All props are resolved and no more elements need to be resolved.',
-                'The `'+NAMES.resolve_root_listener+'` provided by the user is being called with the entire resolved props tree.',
+                'All '+NAMES.presentation_params+' are resolved and no more elements need to be resolved.',
+                'The `'+NAMES.resolve_root_listener+'` provided by the user is being called with the entire resolved '+NAMES.presentation_params+' tree.',
             ],
             /*
             text: [
-                'Above are the props after resolving root element and all its descendant elements.',
-                'User has resolved props '+count+' time'+(count!==1?'s':'')+'.',
+                'Above are the '+NAMES.presentation_params+' after resolving root element and all its descendant elements.',
+                'User has resolved '+NAMES.presentation_params+' '+count+' time'+(count!==1?'s':'')+'.',
             ]
-            title: 'Props Resolve Complete',
+            title: NAMES.presentation_params+' Resolve Complete',
             */
         });
     }
 
     function on_new_props({new_unresolved_props, element, element_instance, count, props__root, path__element}) {
         logger({
-            title: 'New Props ('+count+')',
+            title: 'New '+NAMES.presentation_params+' ('+count+')',
             text: [
                 ...from_props({element, path__element, element_instance}),
-                'Props received;',
+                NAMES.presentation_params+' received;',
                 stringify_props(new_unresolved_props),
                 ...(
                     path__element.length===0 ? [
-                        'Which becomes the root props.',
+                        'Which becomes the root '+NAMES.presentation_params+'.',
                     ] : [
-                        'Resulting into following root props;',
+                        'Resulting into following root '+NAMES.presentation_params+';',
                         stringify_props(props__root),
                     ]
                 )
@@ -840,9 +851,9 @@ function create_process_logger() {
             )
         );
         const key_text = element_key===undefined ? 'Without key' : 'Key: `'+element_key+'`';
-        const props_text = 'Props: '+JSON.stringify(element_props);
+        const props_text = NAMES.presentation_params+': '+JSON.stringify(element_props);
         const from_props = [
-            'New props received from `'+element_fn.name+'`',
+            'New '+NAMES.presentation_params+' received from `'+element_fn.name+'`',
             ' - '+key_text,
             ' - At '+loc,
             ' - '+props_text,
@@ -896,14 +907,14 @@ function assert_element_args([element_fn, element_props, {disable_name_warning}=
         element_fn instanceof Function,
         [
             "The first argument to "+create_element_name,
-            "should be a *Props function.",
+            "should be a "+NAMES.reprop_function+".",
         ].join(' '),
         "Instead, the first provied argument is;",
         element_fn,
     );
     assert_warning(
-        element_fn.name.endsWith('Props') || disable_name_warning,
-        "We recommand all *Props function to have a name ending with `Props`.",
+        element_fn.name.endsWith(NAMES.reprop_function_suffix) || disable_name_warning,
+        "We recommand all "+NAMES.reprop_function+" to have a name ending with `"+NAMES.reprop_function_suffix+"`.",
         [
             "You can hide this warning by passing",
             "`{disable_name_warning: true}` as third argument to",

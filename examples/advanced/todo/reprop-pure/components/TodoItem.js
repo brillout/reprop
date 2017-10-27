@@ -39,13 +39,13 @@ function TodoItemProps() {
         };
     }
 
-    function onBegin({resolve, props}) {
-        itemId = props.id;
+    function onBegin({resolve, attrs}) {
+        itemId = attrs.id;
         resolve();
     }
 
-    function onUpdate({resolve, props}) {
-        itemId = props.id;
+    function onUpdate({resolve, attrs}) {
+        itemId = attrs.id;
         resolve();
     }
 }

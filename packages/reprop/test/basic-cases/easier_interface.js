@@ -5,7 +5,7 @@ const assert_test = assert;
 const TimerProps = {
     name: 'Timer',
     onResolve: ({state: {counter}}) => ({counter}),
-    onBegin: ({resolve, state, props: {step}}) => {
+    onBegin: ({resolve, state, attrs: {step}}) => {
         assert(resolutions.length===0);
 
         state.counter = 0;

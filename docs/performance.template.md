@@ -1,5 +1,4 @@
-!MENU_TITLE About Performance
-!MENU_ORDER 11
+!MENU_ORDER 54
 !MENU
 
 ## Performance
@@ -38,3 +37,4 @@ Instead, and with `react-reprop`, the latest props of an element are retrieved o
 Allowing the props computation to be on par with the component's asynchronousity.
 
 With Fiber Pruning, the pull method can be used while the computation of the props tree representing the entire UI happens asynchronously.
+

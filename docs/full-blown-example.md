@@ -7,7 +7,7 @@
 
     WARNING, READ THIS.
     This is a computed file. Do not edit.
-    Edit `/docs/usage_example.template.md` instead.
+    Edit `/docs/full-blown-example.template.md` instead.
 
 
 
@@ -22,7 +22,7 @@
 
     WARNING, READ THIS.
     This is a computed file. Do not edit.
-    Edit `/docs/usage_example.template.md` instead.
+    Edit `/docs/full-blown-example.template.md` instead.
 
 
 
@@ -37,7 +37,7 @@
 
     WARNING, READ THIS.
     This is a computed file. Do not edit.
-    Edit `/docs/usage_example.template.md` instead.
+    Edit `/docs/full-blown-example.template.md` instead.
 
 
 
@@ -52,7 +52,7 @@
 
     WARNING, READ THIS.
     This is a computed file. Do not edit.
-    Edit `/docs/usage_example.template.md` instead.
+    Edit `/docs/full-blown-example.template.md` instead.
 
 
 
@@ -67,7 +67,7 @@
 
     WARNING, READ THIS.
     This is a computed file. Do not edit.
-    Edit `/docs/usage_example.template.md` instead.
+    Edit `/docs/full-blown-example.template.md` instead.
 
 
 
@@ -76,18 +76,20 @@
 
 -->
 [Introduction](/../../)<br/>
-[API / Full-blown Usage Example](/docs/usage_example.md)<br/>
-[About Performance](/docs/performance.md)
+[API](/docs/api.md)<br/>
+[Full-Blown Example](/docs/full-blown-example.md)<br/>
+[Lifting State Up](/docs/lifting-state-up.md)<br/>
+[Source-of-Truth Rendering](/docs/source-of-truth-rendering.md)<br/>
+[Testing](/docs/testing.md)<br/>
+[Debugging](/docs/debugging.md)<br/>
+[Performance](/docs/performance.md)<br/>
+[Server-Side Rendering](/docs/server-side-rendering.md)
 
 **Read the introduction before reading this.**
 
-(A classical API description is work-in-progress.)
+## Full-blown usage example
 
-## API / Full-blown usage Example
-
-The following example acts as API description as it displays (almost) the whole API.
-After comprehending this example you will be able to use Reprop.
-Thoroughly going over this example will make sure that you have a good understanding of Reprop.
+This is a commented full Todo Item implementation.
 
 ~~~js
 // /examples/advanced/todo/reprop/app.js
@@ -108,8 +110,8 @@ Reprop.resolve({
 // Reprop takes care of view logic whereas React takes care of rendering presentations
 
 function onResolvedProps(props) {
-    // `props` represents the entire props tree. It holds all presentation props for
-    // all presentations (which in this example are React components).
+    // `props` represents the entire props tree. It holds all props for
+    // all presentations (which in this example are pure functional React components).
 
     const element = <TodoListPresentation {...props}/>;
 
@@ -145,22 +147,22 @@ const TodoListPresentation = ({items, isLoading}) => {
 
     return (
         <div>{ items.map(props =>
-            // We pass down <TodoItemPresentation />'s "presentation props"
+            // We pass down <TodoItemPresentation />'s props
             <TodoItemPresentation {...props}/>
         )}</div>
     );
 };
 
-// This "*Props object" specifies how the presentation props are (dynamically) computed.
+// This "*Props object" specifies how the props are computed.
 // In other words, it defines TodoList's view logic.
 const TodoListProps = {
     name: 'TodoList',
-    // `onResolve` returns the "presentation props" that `TodoListPresentation` requires.
+    // `onResolve` returns the props that `TodoListPresentation` requires.
     // The `onResolve` needs two source-of-truths: The data store `context.itemStore` and
     // the UI state `state.isLoading`.
     // Note that `onResolve` is required to be synchronous and Reprop will throw
     // if using an async function or if returning a Promise.
-    onResolve: ({state: {isLoading}, /*props,*/ context: {itemStore}}) => {
+    onResolve: ({state: {isLoading}, context: {itemStore}}) => {
         const items =
             itemStore
             // Every time the view is re-rendered, we ask `itemStore` for the list of items.
@@ -168,25 +170,19 @@ const TodoListProps = {
             .getItems()
             .map(({id}) =>
                 // We are using TodoItem as a black box with TodoItem's only interface being `id`.
-                // This shows that we have effectively encaspulated TodoItem's view logic
+                // This shows that we have effectively isolated TodoItem's view logic
                 // away from TodoList.
                 Reprop.createPropsElement(TodoItemProps, {id})
             );
 
-        // Note that the "presentation props" returned by `onResolve` are not the same than the
-        // "logic props" `props`. TodoList doesn't have any logic props (that's why `props` is
-        // commented away) but does require presentation props which are returned by
-        // this `onResolve` function. Basically;
-        // Logic props -> props for the view logic, i.e. a "*Props object"
-        // Presentation props -> props for the presentation, i.e. a React component in this example
         return {
             items,
             isLoading,
         };
     },
     // TodoList is responsible for creating `itemStore`. But TodoItem needs `itemStore` as well.
-    // We add `itemStore` to the context to make it accessible for TodoItem.
-    addContext: ({/*props*/}) => {
+    // We add `itemStore` to the context to make it accessible to TodoItem.
+    addContext: () => {
         const itemStore = new ItemStore();
         // Adding something to the context makes it available to all children and all descendants.
         // The context is mostly used to pass down data stores and contextual information.
@@ -194,9 +190,9 @@ const TodoListProps = {
         return {itemStore};
     },
     // `onBegin` is called only once. Initial data should load here.
-    onBegin: async ({resolve, state, /*props,*/ context: {itemStore}, /*endParams*/}) => {
+    onBegin: async ({resolve, state, context: {itemStore}}) => {
         state.isLoading = true;
-        // Calling `resolve` is basically telling Reprop that the presentation props should be
+        // Calling `resolve` is basically telling Reprop that the props should be
         // (re)computed. Reprop then calls all `onResolve` to get all latest props. Note that Reprop
         // recomputes the props of all elements in order to respect Source-of-Truth Rendering.
         resolve();
@@ -207,10 +203,6 @@ const TodoListProps = {
         // Tell Reprop that something changed.
         resolve();
     },
-    // Reprop calls `onEnd` when the element is not used anymore. It is typically used to do
-    // cleanup and `endParams` can be mutated in `onBegin` in order to pass necessary cleanup
-    // information to `onEnd`.
-    // onEnd: ({endParams, context, props, state}) => {},
 };
 
 module.exports = {TodoListPresentation, TodoListProps};
@@ -232,10 +224,10 @@ const TodoItemPresentation = ({text, createdAt}) => (
 
 const TodoItemProps = {
     name: 'TodoItem',
-    // This `onResolve` computes and returns the "presentation props" that `TodoItemPresentation` needs.
-    // It assembles the "presentation props" from the "logic props" `props.id` and
+    // This `onResolve` computes and returns the props that `TodoItemPresentation` needs.
+    // It assembles the props from the attr `attrs.id` and
     // the source-of-truth `context.itemStore`.
-    onResolve: ({props: {id}, context: {itemStore}}) => {
+    onResolve: ({attrs: {id}, context: {itemStore}}) => {
         const item = itemStore.getItem(id);
         const {text, createdAt} = item;
         return {
@@ -250,14 +242,21 @@ module.exports = {TodoItemPresentation, TodoItemProps};
 ~~~
 
 To run the example;
+
+Get code & install dependencies;
 ~~~shell
-cd /tmp && git clone git@github.com:brillout/reprop && cd reprop && npm i && ./node_modules/.bin/lerna bootstrap && node ./examples/todo/reprop
+git clone git@github.com:brillout/reprop && cd reprop && npm i && ./node_modules/.bin/lerna bootstrap
+~~~
+
+Run the example;
+~~~shell
+node examples/advanced/todo/reprop
 ~~~
 
 Because `TodoItem` is isolated from `TodoList` we can modify it in isolation.
-The following re-implementation of `TodoItem`
-removes the creation date from the presentation
-and makes the todo items editable.
+The following is a re-implementation of `TodoItem`
+that removes the creation date from the presentation
+and makes todo items editable.
 Note that we do all that without touching `TodoList.js` or `app.js`.
 
 ~~~js
@@ -279,10 +278,9 @@ const TodoItemPresentation = ({text, draftText, onTextChange, onEdit, onSave}) =
 
 const TodoItemProps = {
     name: 'TodoItem',
-    // Note that you can't mutate `state` in `onResolve` and you can never mutate `props`.
-    onResolve: ({state: {draftText}, props: {id}, context: {itemStore}}) => {
-        // We assemble the presentation props from source-of-truths `state.draftText`
-        // and `context.itemStore`.
+    // Note that you can't mutate `state` in `onResolve` and you can never mutate `attrs`
+    onResolve: ({state: {draftText}, attrs: {id}, context: {itemStore}}) => {
+        // We assemble the props from source-of-truths `state.draftText` and `context.itemStore`
         const {text} = itemStore.getItem(id);
         return {
             text,
@@ -294,10 +292,9 @@ const TodoItemProps = {
         state.draftText = null;
         resolve();
     },
-    // As we don't have access to `resolve` in `onResolve` we add the event listeners to `staticProps`.
-    // Reprop will run `staticProps` once and add the returned props to the presentation props on every
-    // resolve.
-    staticProps: ({resolve, state, context: {itemStore}, props: {id}}) => {
+    // As we don't have access to `resolve` in `onResolve` we add the event listeners to `staticProps`,
+    // `staticProps` is run once and the returned props are added to the props returned by `onResolve`
+    staticProps: ({resolve, state, context: {itemStore}, attrs: {id}}) => {
         return {
             onTextChange,
             onEdit,
@@ -326,6 +323,12 @@ const TodoItemProps = {
 module.exports = {TodoItemPresentation, TodoItemProps};
 ~~~
 
+Run it;
+~~~shell
+node examples/advanced/todo/editable/reprop
+~~~
+
+
 <!---
 
 
@@ -335,7 +338,7 @@ module.exports = {TodoItemPresentation, TodoItemProps};
 
     WARNING, READ THIS.
     This is a computed file. Do not edit.
-    Edit `/docs/usage_example.template.md` instead.
+    Edit `/docs/full-blown-example.template.md` instead.
 
 
 
@@ -350,7 +353,7 @@ module.exports = {TodoItemPresentation, TodoItemProps};
 
     WARNING, READ THIS.
     This is a computed file. Do not edit.
-    Edit `/docs/usage_example.template.md` instead.
+    Edit `/docs/full-blown-example.template.md` instead.
 
 
 
@@ -365,7 +368,7 @@ module.exports = {TodoItemPresentation, TodoItemProps};
 
     WARNING, READ THIS.
     This is a computed file. Do not edit.
-    Edit `/docs/usage_example.template.md` instead.
+    Edit `/docs/full-blown-example.template.md` instead.
 
 
 
@@ -380,7 +383,7 @@ module.exports = {TodoItemPresentation, TodoItemProps};
 
     WARNING, READ THIS.
     This is a computed file. Do not edit.
-    Edit `/docs/usage_example.template.md` instead.
+    Edit `/docs/full-blown-example.template.md` instead.
 
 
 
@@ -395,7 +398,7 @@ module.exports = {TodoItemPresentation, TodoItemProps};
 
     WARNING, READ THIS.
     This is a computed file. Do not edit.
-    Edit `/docs/usage_example.template.md` instead.
+    Edit `/docs/full-blown-example.template.md` instead.
 
 
 

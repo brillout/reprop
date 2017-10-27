@@ -14,8 +14,8 @@ Reprop.resolve({
 // Reprop takes care of view logic whereas React takes care of rendering presentations
 
 function onResolvedProps(props) {
-    // `props` represents the entire props tree. It holds all presentation props for
-    // all presentations (which in this example are React components).
+    // `props` represents the entire props tree. It holds all props for
+    // all presentations (which in this example are pure functional React components).
 
     const element = <TodoListPresentation {...props}/>;
 

@@ -97,6 +97,10 @@ const path_module = require('path');
         template.menu_title = get_info('MENU_TITLE', template);
         template.menu_order = get_info('MENU_ORDER', template);
         template.menu_link = get_info('MENU_LINK', template);
+
+        if( template.menu_title === null ) {
+            template.menu_title = titlize(template.filename_base);
+        }
     }
     function get_info(token, template) {
         const prefix = '!'+token+' ';
@@ -212,6 +216,7 @@ const path_module = require('path');
                 const dist_path_relative = distify(template_path);
                 const dist_path__md_relative = make_path_md_absolute(distify(template_path_relative));
                 const source_path__md_relative = make_path_md_absolute(template_path_relative);
+                const filename_base = path_module.basename(template_path).split('.')[0];
                 return {
                     template_path,
                     template_path_relative,
@@ -219,6 +224,7 @@ const path_module = require('path');
                     dist_path_relative,
                     dist_path__md_relative,
                     source_path__md_relative,
+                    filename_base,
                 };
 
                 function distify(path) {
@@ -232,3 +238,19 @@ const path_module = require('path');
         );
     }
 })();
+
+
+function titlize(filename_base){
+    return (
+        filename_base
+        .split('-')
+        .map(word =>
+            word.length <= 3 ? (
+                word
+            ) : (
+                word[0].toUpperCase() + word.slice(1)
+            )
+        )
+        .join(' ')
+    );
+}

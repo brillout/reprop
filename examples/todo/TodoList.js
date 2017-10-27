@@ -5,28 +5,34 @@ import {TodoItemPresentation, TodoItemProps} from './TodoItem';
 
 const TodoListPresentation = ({items}) => (
     <div>{items.map(itemProps =>
-        // We pass down all "presentation props" of TodoItem (!= "logic props", see bellow)
+        // TodoList doesn't know what props TodoItemPresentation expects which is ok because we simply
+        // pass down all `itemProps` (`itemProps` comes from `TodoItemProps`'s `onResolve`)
         <TodoItemPresentation {...itemProps}/>)
     }</div>
 );
 
 const TodoListProps = {
     name: 'TodoList',
-    onResolve: ({context: {itemStore}}) => {
+    onResolve({context}) {
         const items =
-            itemStore.getItems()
-            .map(({id}) =>
-                // The only "logic prop" of TodoItem is `id`
-                Reprop.createPropsElement(TodoItemProps, {id})
-            );
+            context.itemStore.getItems()
+            .map(({id}) => {
+                // The only attr of TodoItemProps is `id`
+                // (see ./TodoItem for infos about what attr means)
+                const attrs = {id};
+                const propsElement = Reprop.createPropsElement(TodoItemProps, attrs);
+                // Reprop will resolve `propsElement` to props (using `TodoItemProps`'s `onResolve`)
+                return propsElement;
+            });
         return {items};
     },
-    addContext: () => {
-        return {itemStore: new ItemStore()};
+    addContext() {
+        const itemStore = new ItemStore();
+        // Adding itemStore to the context makes it available to all descendants
+        return {itemStore};
     },
-    onBegin: async ({resolve, context: {itemStore}}) => {
-        await itemStore.loadItems();
-        // The initial and first `resolve` call is done asynchronously after loading the items.
+    onBegin: async ({resolve, context}) => {
+        await context.itemStore.loadItems();
         resolve();
     },
 };

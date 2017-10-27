@@ -56,11 +56,11 @@ function ChildProps() {
     let name;
 
     return {
-        onBegin: ({props: {key}, resolve}) => {
+        onBegin: ({attrs: {key}, resolve}) => {
             name = key;
             child_resolvers[name] = () => resolve();
         },
-        onUpdate: ({resolve, props: {key}}) => {
+        onUpdate: ({resolve, attrs: {key}}) => {
             assert(name===key);
             resolve();
         },

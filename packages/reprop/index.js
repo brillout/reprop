@@ -36,9 +36,9 @@ function create_element_fn(element_obj) {
         /* TODO stringify functions
         element_fn_map.get(element_obj),
         element_obj,
-        "The name `"+name+"` should be used for one *Props object only. The name is used at the two above printed *Props object instead.",
+        "The name `"+name+"` should be used for one "+NAMES.reprop_object+" only. The name is used at the two above printed "+NAMES.reprop_object+" instead.",
         */
-        "The name `"+name+"` should be used for one *Props object only.",
+        "The name `"+name+"` should be used for one "+NAMES.reprop_object+" only.",
     );
     assert_internal(
         !element_names[name] || element_fn_map.has(element_obj),
@@ -47,12 +47,12 @@ function create_element_fn(element_obj) {
     );
     element_names[name] = true;
 
-    Object.defineProperty(element_fn, "name", {value: name+'Props'});
+    Object.defineProperty(element_fn, "name", {value: name+NAMES.reprop_function_suffix});
 
     return element_fn;
 
     function element_fn() {
-        let props = {};
+        let attrs = {};
         const state = {};
         const endParams = {};
         let props_old = {};
@@ -86,24 +86,24 @@ function create_element_fn(element_obj) {
 
         const life_methods = {
            [onResolve]: args => {
-                return element_obj[onResolve]({...args, ...get_stateful_objects()});
-            },
+               return element_obj[onResolve]({...args, ...get_stateful_objects()});
+           },
            [onBegin]: args => {
-                update_props(args);
-                if( ! element_obj[onBegin] ) {
-                    resolve(args);
-                } else {
-                    return element_obj[onBegin]({...args, endParams, ...get_stateful_objects()});
-                }
-            },
+               update_props(args);
+               if( ! element_obj[onBegin] ) {
+                   resolve(args);
+               } else {
+                   return element_obj[onBegin]({...args, endParams, ...get_stateful_objects()});
+               }
+           },
            [onUpdate]: args => {
-                update_props(args);
-                if( ! element_obj[onUpdate] ) {
-                    resolve(args);
-                } else {
-                    return element_obj[onUpdate]({...args, ...get_stateful_objects()});
-                }
-            },
+               update_props(args);
+               if( ! element_obj[onUpdate] ) {
+                   resolve(args);
+               } else {
+                   return element_obj[onUpdate]({...args, ...get_stateful_objects()});
+               }
+           },
         };
 
         if( element_obj[onEnd] ) {
@@ -127,12 +127,17 @@ function create_element_fn(element_obj) {
         return life_methods;
 
         function get_stateful_objects() {
-            return {props, state, [NAMES_2.life_methods_args_previous_props]: props_old};
+            return {
+                state,
+                [NAMES_2.life_methods_args_previous_props]: props_old,
+                [NAMES.life_methods_args_attrs]: attrs,
+                [NAMES.__tmp__props]: attrs,
+            };
         }
 
         function update_props(args) {
-            props_old = props;
-            props = {...args.props};
+            props_old = attrs;
+            attrs = {...args.attrs};
         }
 
         function resolve(args) {
@@ -145,7 +150,7 @@ function assert_element_obj(element_obj) {
     assert_usage(
         element_obj instanceof Object,
         element_obj,
-        "*Props object is expected to be an object be we got the value printed above instead",
+        NAMES.reprop_object+" is expected to be an object be we got the value printed above instead",
     );
     assert_usage(
         element_obj.onResolve instanceof Function,

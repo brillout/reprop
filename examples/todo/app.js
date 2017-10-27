@@ -1,11 +1,13 @@
-import Reprop from 'reprop' // npm install reprop
+import Reprop from 'reprop';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import {TodoListPresentation, TodoListProps} from './TodoList';
 
+const TodoListPropsElement = Reprop.createPropsElement(TodoListProps, {});
 Reprop.resolve({
-    propsElement: Reprop.createPropsElement(TodoListProps, {}),
+    propsElement: TodoListPropsElement,
     onResolvedProps: props => {
-        console.log(ReactDOMServer.renderToStaticMarkup(<TodoListPresentation {...props}/>));
+        const reactElement = <TodoListPresentation {...props}/>;
+        console.log(ReactDOMServer.renderToStaticMarkup(reactElement));
     },
 });

@@ -138,7 +138,7 @@ const {TodoListProps, TodoListPresentation} = require('./components/TodoList');
 Reprop.resolve({
     propsElement: Reprop.createPropsElement(
         TodoListProps,
-        // logic props for TodoListProps
+        // `attrs` for TodoListProps
         {}
     ),
     onResolvedProps,
@@ -193,7 +193,7 @@ function TodoListProps() {
      // staticProps,
     };
 
-    function onResolve({context, /*props, state*/}) {
+    function onResolve({context, /*attrs, state*/}) {
         const items =
             context.itemStore
             .getItems()
@@ -206,12 +206,12 @@ function TodoListProps() {
         };
     }
 
-    function addContext({/*props, context*/}) {
+    function addContext({/*attrs, context*/}) {
         const itemStore = new ItemStore();
         return {itemStore};
     }
 
-    async function onBegin({resolve, context, /*props, endParams*/}) {
+    async function onBegin({resolve, context, /*attrs, endParams*/}) {
         state.isLoading = true;
         resolve();
 
@@ -221,16 +221,16 @@ function TodoListProps() {
         resolve();
     }
 
-    // `onUpdate` is called every time `createPropsElement` is called on an element that
-    // has already been instantiated. This is the pendant of React's `componentWillReceiveProps`.
-    function onUpdate({resolve, /*props,*/ context}) {
+    // `onUpdate` is called every time `createPropsElement` is called for a *Props object that
+    // has already been instantiated.
+    function onUpdate({resolve, /*attrs,*/ context}) {
         resolve();
     }
 
     /*
-    function onEnd({endParams, props, state, context}) {
+    function onEnd({endParams, attrs, state, context}) {
     }
-    function staticProps({resolve, state, context, props}) {
+    function staticProps({resolve, state, context, attrs}) {
         return {};
     }
     */
@@ -281,17 +281,18 @@ function TodoItemProps() {
         };
     }
 
-    function onBegin({resolve, props}) {
-        itemId = props.id;
+    function onBegin({resolve, attrs}) {
+        itemId = attrs.id;
         resolve();
     }
 
-    function onUpdate({resolve, props}) {
-        itemId = props.id;
+    function onUpdate({resolve, attrs}) {
+        itemId = attrs.id;
         resolve();
     }
 }
 ~~~
+
 
 <!---
 

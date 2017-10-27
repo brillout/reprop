@@ -76,8 +76,14 @@
 
 -->
 [Introduction](/../../)<br/>
-[API / Full-blown Usage Example](/docs/usage_example.md)<br/>
-[About Performance](/docs/performance.md)
+[API](/docs/api.md)<br/>
+[Full-Blown Example](/docs/full-blown-example.md)<br/>
+[Lifting State Up](/docs/lifting-state-up.md)<br/>
+[Source-of-Truth Rendering](/docs/source-of-truth-rendering.md)<br/>
+[Testing](/docs/testing.md)<br/>
+[Debugging](/docs/debugging.md)<br/>
+[Performance](/docs/performance.md)<br/>
+[Server-Side Rendering](/docs/server-side-rendering.md)
 
 ## Performance
 
@@ -115,6 +121,7 @@ Instead, and with `react-reprop`, the latest props of an element are retrieved o
 Allowing the props computation to be on par with the component's asynchronousity.
 
 With Fiber Pruning, the pull method can be used while the computation of the props tree representing the entire UI happens asynchronously.
+
 
 <!---
 

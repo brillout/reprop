@@ -11,10 +11,10 @@ const TodoItemPresentation = ({text, createdAt}) => (
 
 const TodoItemProps = {
     name: 'TodoItem',
-    // This `onResolve` computes and returns the "presentation props" that `TodoItemPresentation` needs.
-    // It assembles the "presentation props" from the "logic props" `props.id` and
+    // This `onResolve` computes and returns the props that `TodoItemPresentation` needs.
+    // It assembles the props from the attr `attrs.id` and
     // the source-of-truth `context.itemStore`.
-    onResolve: ({props: {id}, context: {itemStore}}) => {
+    onResolve: ({attrs: {id}, context: {itemStore}}) => {
         const item = itemStore.getItem(id);
         const {text, createdAt} = item;
         return {

@@ -110,17 +110,17 @@ const TodoList = ReactReprop(
 
     // View logic part
     name: 'TodoList',
-    onResolve: ({state, context/*, props*/}) => {
+    onResolve: ({state, context/*, attrs*/}) => {
         return {
             itemIds: context.itemStore.getItems().map(({id}) => id),
             isLoading: state.isLoading,
         };
     },
-    addContext: ({/*props, context*/}) {
+    addContext: ({/*attrs, context*/}) {
         const itemStore = new ItemStore();
         return {itemStore};
     },
-    onBegin: async ({resolve, /*props,*/ state, context/*, endParams*/}) => {
+    onBegin: async ({resolve, /*attrs,*/ state, context/*, endParams*/}) => {
         state.isLoading = true;
         // We don't want the temporary loading state to be resolved in the case of
         // server-side rendering
@@ -133,7 +133,7 @@ const TodoList = ReactReprop(
         state.isLoading = false;
         resolve();
     },
- // onEnd: ({endParams, props, state, context}) => {},
+ // onEnd: ({endParams, attrs, state, context}) => {},
 });
 ~~~
 
@@ -157,7 +157,7 @@ const TodoItem = ReactReprop(
 
     // View logic part
     name: 'TodoItem',
-    onResolve: ({props: {id}, context: {itemStore}}) => {
+    onResolve: ({attrs: {id}, context: {itemStore}}) => {
         const item = itemStore.getItem(id);
         const {text, createdAt} = item;
         return {

@@ -5,7 +5,7 @@ const HelloProps = {
     onResolve: ({
         previousResolvedProps: {timerCount: previousTimerCount},
         state: {timerStart},
-        props: {name},
+        attrs: {name},
         previousProps: {name: previousName}
     }) => {
         const timerCount = Math.floor((new Date() - timerStart)/1000);
@@ -21,7 +21,7 @@ const HelloProps = {
             message,
         };
     },
-    onBegin: ({props, resolve, state}) => {
+    onBegin: ({attrs, resolve, state}) => {
         state.timerStart = new Date();
         resolve();
         setInterval(() => {
@@ -30,7 +30,7 @@ const HelloProps = {
     },
 };
 
-// It is a convention to have one component = one file but we make an exception to keep things minimal.
+// It is a convention to have one view = one file but we make an exception to keep things minimal.
 const AppProps = {
     name: 'App',
     onResolve: ({state: {name}}) => {

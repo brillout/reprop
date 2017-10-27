@@ -15,7 +15,7 @@ const TodoItem = ReactReprop(
 
     // View logic part
     name: 'TodoItem',
-    onResolve: ({props: {id}, context: {itemStore}}) => {
+    onResolve: ({attrs: {id}, context: {itemStore}}) => {
         const item = itemStore.getItem(id);
         const {text, createdAt} = item;
         return {

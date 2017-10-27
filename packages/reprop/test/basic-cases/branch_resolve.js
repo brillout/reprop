@@ -75,11 +75,11 @@ function ParentProps() {
 function ChildProps() {
     let name;
     return {
-        onBegin: ({resolve, resolveSelfAndDescendantsOnly, props: {key, timeout}}) => {
+        onBegin: ({resolve, resolveSelfAndDescendantsOnly, attrs: {key, timeout}}) => {
             name = key;
             resolvers[name] = {resolve, resolveSelfAndDescendantsOnly};
         },
-        onUpdate: ({resolve, props: {key}}) => {
+        onUpdate: ({resolve, attrs: {key}}) => {
             assert(name===key);
             resolve();
         },

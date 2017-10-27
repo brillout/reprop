@@ -19,22 +19,22 @@ const TodoListPresentation = ({items, isLoading}) => {
 
     return (
         <div>{ items.map(props =>
-            // We pass down <TodoItemPresentation />'s "presentation props"
+            // We pass down <TodoItemPresentation />'s props
             <TodoItemPresentation {...props}/>
         )}</div>
     );
 };
 
-// This "*Props object" specifies how the presentation props are (dynamically) computed.
+// This "*Props object" specifies how the props are computed.
 // In other words, it defines TodoList's view logic.
 const TodoListProps = {
     name: 'TodoList',
-    // `onResolve` returns the "presentation props" that `TodoListPresentation` requires.
+    // `onResolve` returns the props that `TodoListPresentation` requires.
     // The `onResolve` needs two source-of-truths: The data store `context.itemStore` and
     // the UI state `state.isLoading`.
     // Note that `onResolve` is required to be synchronous and Reprop will throw
     // if using an async function or if returning a Promise.
-    onResolve: ({state: {isLoading}, /*props,*/ context: {itemStore}}) => {
+    onResolve: ({state: {isLoading}, context: {itemStore}}) => {
         const items =
             itemStore
             // Every time the view is re-rendered, we ask `itemStore` for the list of items.
@@ -42,25 +42,19 @@ const TodoListProps = {
             .getItems()
             .map(({id}) =>
                 // We are using TodoItem as a black box with TodoItem's only interface being `id`.
-                // This shows that we have effectively encaspulated TodoItem's view logic
+                // This shows that we have effectively isolated TodoItem's view logic
                 // away from TodoList.
                 Reprop.createPropsElement(TodoItemProps, {id})
             );
 
-        // Note that the "presentation props" returned by `onResolve` are not the same than the
-        // "logic props" `props`. TodoList doesn't have any logic props (that's why `props` is
-        // commented away) but does require presentation props which are returned by
-        // this `onResolve` function. Basically;
-        // Logic props -> props for the view logic, i.e. a "*Props object"
-        // Presentation props -> props for the presentation, i.e. a React component in this example
         return {
             items,
             isLoading,
         };
     },
     // TodoList is responsible for creating `itemStore`. But TodoItem needs `itemStore` as well.
-    // We add `itemStore` to the context to make it accessible for TodoItem.
-    addContext: ({/*props*/}) => {
+    // We add `itemStore` to the context to make it accessible to TodoItem.
+    addContext: () => {
         const itemStore = new ItemStore();
         // Adding something to the context makes it available to all children and all descendants.
         // The context is mostly used to pass down data stores and contextual information.
@@ -68,9 +62,9 @@ const TodoListProps = {
         return {itemStore};
     },
     // `onBegin` is called only once. Initial data should load here.
-    onBegin: async ({resolve, state, /*props,*/ context: {itemStore}, /*endParams*/}) => {
+    onBegin: async ({resolve, state, context: {itemStore}}) => {
         state.isLoading = true;
-        // Calling `resolve` is basically telling Reprop that the presentation props should be
+        // Calling `resolve` is basically telling Reprop that the props should be
         // (re)computed. Reprop then calls all `onResolve` to get all latest props. Note that Reprop
         // recomputes the props of all elements in order to respect Source-of-Truth Rendering.
         resolve();
@@ -81,10 +75,6 @@ const TodoListProps = {
         // Tell Reprop that something changed.
         resolve();
     },
-    // Reprop calls `onEnd` when the element is not used anymore. It is typically used to do
-    // cleanup and `endParams` can be mutated in `onBegin` in order to pass necessary cleanup
-    // information to `onEnd`.
-    // onEnd: ({endParams, context, props, state}) => {},
 };
 
 module.exports = {TodoListPresentation, TodoListProps};

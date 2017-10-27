@@ -6,7 +6,7 @@ const {TodoListProps, TodoListPresentation} = require('./components/TodoList');
 Reprop.resolve({
     propsElement: Reprop.createPropsElement(
         TodoListProps,
-        // logic props for TodoListProps
+        // `attrs` for TodoListProps
         {}
     ),
     onResolvedProps,

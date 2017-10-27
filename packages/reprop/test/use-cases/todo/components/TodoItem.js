@@ -70,7 +70,7 @@ function TodoItemProps() {
         };
     }
 
-    function onProp({props: {id}, resolve}) {
+    function onProp({attrs: {id}, resolve}) {
         itemId = id;
         resolve();
     }

@@ -1,7 +1,7 @@
 {
   "name": "reprop",
   "version": "0.1.0",
-  "description": "View Logic Management. Re-thought, from the ground up.",
+  "description": "A JavaScript library to manage the logics of views",
   "repository": "github:brillout/reprop",
   "scripts": {
     "prepare": "./node_modules/.bin/self-import"

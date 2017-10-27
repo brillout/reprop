@@ -1,5 +1,6 @@
 // === View presentation ===
 const HelloPresentation = (
+    // This could as well be a React component / Vue component / etc.
     props => "<div style='color: green'>"+props.message+"</div>"
 );
 
@@ -7,12 +8,13 @@ const HelloPresentation = (
 const HelloProps = {
     name: 'Hello',
     onResolve() { // `onResolve` returns the `props` for `HelloPresentation`
-        return {message: 'Hello World'};
+        const props = {message: 'Hello World'};
+        return props;
     },
 };
 
 // === Rendering ===
-const Reprop = require('reprop');
+const Reprop = require('reprop'); // npm install reprop
 const HelloPropsElement = Reprop.createPropsElement(HelloProps);
 Reprop.resolve({
     propsElement: HelloPropsElement,
