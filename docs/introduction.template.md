@@ -184,11 +184,11 @@ We call this Source-of-Truth Rendering (STR).
 
 A specificity of Reprop is that we apply STR all the way from the source-of-truths (whereas STR is often only applied starting from the props tree).
 
-More at [Source-of-Truth Rendering](/docs/source-of-truth-rendering).
+More at [Source-of-Truth Rendering](/docs/source-of-truth-rendering.md).
 
 > No more higher-order/container/provider components
 
-More at [Lifting State Up](/docs/lifting-state-up).
+More at [Lifting State Up](/docs/lifting-state-up.md).
 
 > Server-side rendering capability is included for "free"
 
@@ -196,11 +196,11 @@ With Reprop, making your app server-side render-able is a matter of two things;
 <span>1.</span> make sure to not call `resolve` before initial data is retrieved (on the server), and
 <span>2.</span> make sure that data stores are created in a `addContext` function of a view
 
-More at [Server-Side Rendering](/docs/server-side-rendering).
+More at [Server-Side Rendering](/docs/server-side-rendering.md).
 
 > Track the entire history of your UI
 
-More at [Debugging](/docs/debugging).
+More at [Debugging](/docs/debugging.md).
 
 
 
