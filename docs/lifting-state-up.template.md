@@ -4,7 +4,7 @@
 
 ## Lifting state up
 
-We will show how we lift state app with the todo app shown in the introduction [here]('/../../#a-todo-list-app-with-reprop).
+We will show how we lift state app with the todo app shown in the introduction [here](/../../#a-todo-list-app-with-reprop).
 
 The rest of this document assumes that you have read the introduction including the todo app implementation.
 
